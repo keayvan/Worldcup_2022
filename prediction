@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Nov 22 20:20:07 2022
+
+@author: k1
+"""
+
+import pandas as pd
+
+matches = pd.read_csv('fifa_world_cup_2022_sch.csv')
+teames_df = pd.read_csv('./last_team_scores.csv')
+
+teames_df['potential'] = (teames_df.iloc[:,3:]).mean(axis = 1)
+
+group_matches = matches.iloc[:48,:]
+round_16 = matches.iloc[48:56, :]
+quarter_finals = matches.iloc[56:60, :]
+semi_finals = matches.iloc[60:62, :]
+final = matches.iloc[62:63, :]
+second_final = matches.iloc[63:64, :]
+
+team_group = group_matches.drop(['country2'], axis=1)
+team_group = team_group.drop_duplicates().reset_index(drop=True)
+team_group = team_group.rename(columns = {"country1":"team"})
+
+
+def matches(g_matches):
+    g_matches.insert(2, 'potential1', g_matches['country1'].map(teames_df.set_index('team')['potential']))
+    g_matches.insert(3, 'potential2', g_matches['country2'].map(teames_df.set_index('team')['potential']))
+    g_matches.insert(4, 'rank1', g_matches['country1'])
+    g_matches.insert(5, 'rank2', g_matches['country2'])
+    return g_matches
+
+
+xxxx = matches(group_matches)
