@@ -40,7 +40,7 @@ X_hold_test = scaler.transform(X_hold_test)
 
 
 from xgboost import XGBClassifier
-metrics_display(XGBClassifier(use_label_encoder=False))
+# metrics_display(XGBClassifier(use_label_encoder=False))
 
 model = XGBClassifier()
 
@@ -50,3 +50,4 @@ y_pred = model.predict(X_hold_test)
 print(classification_report(y_hold_test,y_pred))
 ConfusionMatrixDisplay.from_predictions(y_hold_test,y_pred);
 
+model.save_model('./XGBOOST_model.json')
